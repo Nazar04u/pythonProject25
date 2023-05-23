@@ -1,0 +1,163 @@
+{% extends 'realization/base.html' %}
+
+{% load static %}
+
+{%block title%}Home{%endblock%}
+
+{% block navigation %}
+  {% include './components/header.html' %}
+{% endblock %}
+
+{% block content %}
+  <main>
+        <div class="container">
+            <div class="main-content">
+                <div><h2>Inhale. Gift. Exhale.</h2></div>
+                <div class="description"><p>The gifts you need, stress-free. Shop the best of Google with ease.</p></div>
+                <div class="type_button">
+                    <div><a href="">Browse deals</a></div>
+                    <div class="a_in_main"><a href="">Browse the gift guide</a></div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <div class="new_products">
+        <div class="container">
+            <div class="h4">Sneak a peek. For you or for them.</div>
+            <div class="row">
+                {% for obj in page_obj %}
+                    <div class="col-3 col-lg-3 col-md-6 col-sm-12">
+                        <a href="">New</a>
+                        <img src="media/{{ obj.image }}" alt="Watch">
+                        <p>{{ obj.name }}</p>
+                        <a href="{% url 'detail' pk=obj.pk %}">View more</a>
+                    </div>
+                {% endfor %}
+                <div class="pagination" style="padding-left:30%; padding-top:4%">
+                    <span class="step-links">
+                        {% if page_obj.has_previous %}
+                            <button type="button" class="btn btn-secondary"><a class="text-decoration-none" href="?page=1">&laquo; first</a></button>
+                            <button type="button" class="btn btn-secondary"><a class="text-decoration-none" href="?page={{ page_obj.previous_page_number }}">previous</a></button>
+                        {% endif %}
+
+                        <span class="current">
+                            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                         </span>
+
+                        {% if page_obj.has_next %}
+                            <button type="button" class="btn btn-secondary"><a class="text-decoration-none" href="?page={{ page_obj.next_page_number }}">next</a></button>
+                            <button type="button" class="btn btn-secondary"><a class="text-decoration-none" href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a></button>
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="page3">
+        <div class="container">
+            <div class="row">
+                <div class="col-6 col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-6 image">
+                    <img src="{% static 'img/NBA.svg' %}" alt="NBA">
+                </div>
+                <div class="col-6 col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-6 text">
+                    <h3>This holiday season, Google Pixel is giving back.</h3>
+                    <p>We're contributing $1 million to the NBA Foundation to help advance HBCU students in their careers across STEM, sports, and media industries.</p>
+                    <a href="">Learn more</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="page4">
+        <div class="container">
+            <div class="row">
+                <div class="col-4 col-lg-6 col-sm-12 offerings">
+                    <h4>Google Pixel Watch</h4>
+                    <p>Help by Google. Health by Fitbit.</p>
+                    <div><a href="">Learn more</a></div>
+                    <img src="{% static 'img/Watches.svg' %}" alt="Watch">
+                </div>
+                <div class="col-4 col-lg-6 col-sm-12 offerings">
+                    <h4>Nest Wifi Pro with Wi-Fi 6E</h4>
+                    <p>The better way to wifi.</p>
+                    <div><a href="">Learn more</a></div>
+                    <img src="{% static 'img/Nest Wi-Fi.svg' %}" alt="Nest Wifi">
+                </div>
+                <div class="col-4 col-lg-6 col-sm-12 offerings1">
+                    <h4>Nest Doorbell (wired)</h4>
+                    <p>Know more. No charging.</p>
+                    <div><a href="">Learn more</a></div>
+                    <img src="{% static 'img/Nest Doorbell.svg' %}" alt="Doorbell">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="page5">
+        <div class="container">
+            <div class="row">
+                <div class="col-6 col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 event1">
+                    <h4>Pixel Pass</h4>
+                    <p>One price for all things Pixel</p>
+                    <div><a href="">Learn more</a></div>
+                    <img src="{% static 'img/Pass.svg' %}" alt="Pass card">
+                </div>
+                <div class="col-6 col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 event2">
+                    <h4>Switch to Pixel</h4>
+                    <p>Here’s what #TeamPixel has to say about it.</p>
+                    <div><a href="">Learn more</a></div>
+                    <img src="{% static 'img/Man.svg' %}" alt="Meb">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="page6">
+        <div class="container">
+            <h3>Shop by category.</h3>
+            <div class="row">
+                <div class="col-3 col-xxl-3 col-xl-3 col-lg-6 col-md-12 col-sm-12 category">
+                    <img src="{% static 'img/Camera.svg' %}" alt="Cameras">
+                    <a href="">Cameras</a>
+                </div>
+                <div class="col-3 col-xxl-3 col-xl-3 col-lg-6 col-md-12 col-sm-12 category">
+                    <img src="{% static 'img/Doorbell product.svg' %}" alt="Doorbells">
+                    <a href="">Doorbells</a>
+                </div>
+                <div class="col-3 col-xxl-3 col-xl-3 col-lg-6 col-md-12 col-sm-12 category">
+                    <img src="{% static 'img/Streaming.svg' %}" alt="Streaming">
+                    <a href="">Streaming</a>
+                </div>
+                <div class="col-3 col-xxl-3 col-xl-3 col-lg-6 col-md-12 col-sm-12 category">
+                    <img src="{% static 'img/Packages.svg' %}" alt="Packages">
+                    <a href="">Packages</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="page7">
+        <div class="container">
+            <div class="row">
+                <div class="col-6 col-xxl-6 col-md-12 watches_adv">
+                    <p>Watches</p>
+                    <h3>Keep moving. Keep improving.</h3>
+                    <div class="button"><a href="">Explore watches</a></div>
+                    <div class="cards_image"><img src="{% static 'img/page5_Watches.svg' %}" alt="Watches"></div>
+                </div>
+                <div class="col-6 col-xxl-6 col-md-12 earbuds_adv">
+                    <p>Earbuds</p>
+                    <h3>Great sound. All around.</h3>
+                    <div class="button"><a href="">Explore earbuds</a></div>
+                    <div class="cards_image"><img src="{% static 'img/page5_Earbuds.svg' %}" alt="Earbuds"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="page8">
+        <div class="container">
+            <div class="d-flex flex-column align-items-center justify-content-sm-between sign_up">
+                <div><img src="{% static 'img/Vector.svg' %}" alt=""></div>
+                <h5 class="">Keep me updated about devices, news, tips, and offers from Google Store.</h5>
+                <button type="button" class="btn-outline-light"><a href="">Log in and sign up</a></button>
+                <a href="" class="link-info ">or enter email address</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

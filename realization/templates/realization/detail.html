@@ -1,0 +1,60 @@
+{% extends 'realization/base.html' %}
+
+{% load static %}
+
+{%block title%}Details{%endblock%}
+
+{% block navigation %}
+    {% include './components/header.html' %}
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-6">
+                <img src="../../media/{{ good.image }}" alt="">
+            </div>
+            <div class="col-6">
+                <div class="information">
+                    <p>Price:{{good.price}}</p>
+                    <p>Characteristic: {{good.charecterist|safe}}</p>
+                    {% if good.delivery %}
+                        <p>Delivery:available</p>
+                    {% else %}
+                        <p>Delivery:not available</p>
+                    {% endif %}
+                    <p>Amount available: {{ good.amount }}</p>
+                    <p>Seller: {{good.seller}}</p>
+                    <p> {{basket}} </p>
+                    <a href="{% url 'add_to_cart' item_id=good.id %}" class="btn btn-warning" >Add to cart</a>
+                </div>
+            </div>
+        </div>
+        <form action="" method="post" class="d-flex justify-content-between flex-column">
+            {% csrf_token %}
+            {{ form }}
+            <button class="btn btn-danger" type="submit">Send</button>
+        </form>
+    </div>
+    <div class="container">
+        <div class="mt-2 row">
+            {% for com in comment %}
+                <div class="d-flex d-row p-3 col-12">
+                    <img src="#" width="40" height="40" class="rounded-circle mr-3">
+                    <div class="w-100">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex flex-row align-items-center">
+                            <span class="mr-2">{{com.user}}</span>
+                            </div>
+                            <small>{{ com.date }}</small>
+                        </div>
+                        <p class="text-justify comment-text mb-0">{{ com.comment }}</p>
+                        <div class="d-flex flex-row user-feed "></div>
+                            <span class="wish"><i class="fa fa-heartbeat mr-2"></i>24</span>
+                            <a href="#">Leave reply to comment</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

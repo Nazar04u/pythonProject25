@@ -1,0 +1,24 @@
+{% extends 'realization/base.html' %}
+
+{% load static %}
+
+
+{% block navigation %}
+    <header class="text-center" >
+        <h3 style="color: blue">Ask your question</h3>
+    </header>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <form action="" method="post">
+            {% csrf_token %}
+            <label class="form-label" for="form3Example4cg">Question</label>
+            {{ form.text }}
+            <div class="d-flex justify-content-center">
+                <button type="submit"
+                class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">Send</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}

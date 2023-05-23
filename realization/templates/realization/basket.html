@@ -1,0 +1,84 @@
+{% extends 'realization/base.html' %}
+
+{% load static %}
+
+{% block navigation %}
+    {% include './components/header.html' %}
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h3>Your things:</h3>
+        <p> {{basket_items}} </p>
+        <p> {{basket}} </p>
+        <p> {{basket.id}} </p>
+        <form class="row" action="" method="post">
+            <div class="col-4">
+                <div class="card">
+                    <img src="../img/Watch.svg" class="w-100 border-bottom" alt="Product">
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">Here is some example text to make up the card's content. Replace it with your own text anytime.</p>
+                    </div>
+                    <label for="item3Price">Price:</label>
+                    <input type="number" class="form-control price" step="0.01" oninput="calculateTotal()">
+                    <label for="item3Quantity">Quantity:</label>
+                    <input type="number" class="form-control quantity" oninput="calculateTotal()">
+                    <div class="card-body">
+                        <a href="#" class="btn btn-danger btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Delete" ><i class="fa fa-trash"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="card">
+                    <img src="../img/Watch.svg" class="w-100 border-bottom" alt="Product">
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">Here is some example text to make up the card's content. Replace it with your own text anytime.</p>
+                    </div>
+                    <label for="item3Price">Price:</label>
+                    <input type="number" class="form-control price" step="0.01" oninput="calculateTotal()">
+                    <label for="item3Quantity">Quantity:</label>
+                    <input type="number" class="form-control quantity" oninput="calculateTotal()">
+                    <div class="card-body">
+                        <button class="btn btn-danger btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Delete" ><i class="fa fa-trash"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="card">
+                    <img src="../img/Watch.svg" class="w-100 border-bottom" alt="Product">
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">Here is some example text to make up the card's content. Replace it with your own text anytime.</p>
+                    </div>
+                    <label for="item3Price">Price:</label>
+                    <input type="number" class="form-control price" step="0.01" oninput="calculateTotal()">
+                    <label for="item3Quantity">Quantity:</label>
+                    <input type="number" class="form-control quantity" oninput="calculateTotal()">
+                    <div class="card-body">
+                        <button class="btn btn-danger btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Delete" ><i class="fa fa-trash"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="card">
+                    <img src="../img/Watch.svg" class="w-100 border-bottom" alt="Product">
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">Here is some example text to make up the card's content. Replace it with your own text anytime.</p>
+                    </div>
+                    <label for="item3Price">Price:</label>
+                    <input type="number" class="form-control price" step="0.01" oninput="calculateTotal()">
+                    <label for="item3Quantity">Quantity:</label>
+                    <input type="number" class="form-control quantity" oninput="calculateTotal()">
+                    <div class="card-body">
+                        <button class="btn btn-danger btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Delete" ><i class="fa fa-trash"></i></button>
+                    </div>
+                </div>
+            </div>
+            <p id="totalPrice"></p>
+            <button type="submit" class="btn btn-primary">Submit Total Price</button>
+        </form>
+    </div>
+{% endblock %}

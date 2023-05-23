@@ -1,0 +1,51 @@
+{% extends 'realization/base.html' %}
+
+{% load static %}
+
+{% block navigation %}
+    <header class="text-center" >
+        <h3 style="color: white">SIgnUP</h3>
+    </header>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="mask d-flex align-items-center h-100 gradient-custom-3">
+            <div class="container ">
+                <div class="row d-flex justify-content-center align-items-center">
+                    <div class="col-12 col-md-9 col-lg-7 col-xl-6">
+                        <div class="card" style="border-radius: 15px;">
+                            <div class="card-body p-5">
+                                <h2 class="text-uppercase text-center mb-5">Create an account</h2>
+                                <form method="POST">
+                                    {% csrf_token %}
+                                    <div class="form-outline mb-4">
+                                        {{ form.username }}
+                                        <label class="form-label" for="form3Example1cg">Your Name</label>
+                                    </div>
+                                    <div class="form-outline mb-4">
+                                        {{ form.email  }}
+                                        <label class="form-label" for="form3Example3cg">Your Email</label>
+                                    </div>
+                                    <div class="form-outline mb-4">
+                                        {{ form.password1 }}
+                                        <label class="form-label" for="form3Example4cg">Password</label>
+                                    </div>
+                                    <div class="form-outline mb-4">
+                                        {{ form.password2 }}
+                                        <label class="form-label" for="form3Example4cdg">Repeat your password</label>
+                                    </div>
+                                    <div class="d-flex justify-content-center">
+                                        <button type="submit" class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">Register</button>
+                                    </div>
+                                    <p class="text-center text-muted mt-5 mb-0">Have already an account?
+                                        <a href="{% url 'signin' %}" class="fw-bold text-body"><u>Login here</u></a></p>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
