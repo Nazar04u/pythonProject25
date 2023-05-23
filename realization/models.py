@@ -39,33 +39,21 @@ class Question(models.Model):
 class Basket(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
     active = models.BooleanField(default=False)
-<<<<<<< HEAD
     items = models.ManyToManyField(Goods, through='BasketItems')
 
     def get_cart_total(self):
-        return sum([item.item.price for item in self.item.all()])
+        return sum([item.item.price for item in self.items.all()])
 
+    def admin_names(self):
+        return ', '.join([a.name for a in self.items.all()])
 
+    admin_names.short_description = "Goods"
+
+    def admin_total(self):
+        return str(sum([a.price for a in self.items.all()]))
+
+    admin_names.short_description = "Total"
 class BasketItems(models.Model):
-    basket = models.OneToOneField(Basket, on_delete=models.CASCADE, default=None)
+    basket = models.ForeignKey(Basket, on_delete=models.CASCADE, default=None)
     goods = models.ForeignKey(Goods, on_delete=models.CASCADE, default=None)
     quantity = models.IntegerField(default=0)
-=======
-
-
-class BasketItems(models.Model):
-    item = models.ForeignKey(Goods, on_delete=models.CASCADE, related_name='items', default=None)
-    quantity = models.IntegerField(default=0)
-
-
-class UserOrder(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
-    basket = models.ForeignKey(Basket, on_delete=models.CASCADE, default=None)
-    order_items = models.ManyToManyField(BasketItems,  blank=True, default=list)
-    is_ordered = models.BooleanField(default=False)
-
-
-    def get_cart_total(self):
-        return sum([item.item.price for item in self.order_items.all()])
-
->>>>>>> origin/main
