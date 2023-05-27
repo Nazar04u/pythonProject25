@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponseRedirect
 from django.views import View
-from .models import Goods, Comment, Question, Basket, BasketItems
+from .models import Goods, Comment, Question, Basket, BasketItems, Order
 from django import forms
 from django.utils import timezone
 from django.core.paginator import Paginator
@@ -9,6 +9,7 @@ from .forms import SignUpForm, SignInForm, CommentForm, QuestionForm
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm
+from django.db.models import Q
 
 
 class HomeView(View):
@@ -144,10 +145,10 @@ class ThanksView(View):
 class BasketView(View):
     def get(self, request, id, *args, **kwargs):
         basket = Basket.objects.get(id=id)
-        basket_items = Basket.objects.get(basket=basket).item
+        items = basket.items.all()
         return render(request, 'realization/basket.html', context={
             "basket": basket,
-            "basket_items": basket_items,
+            'items': items,
         })
 
 
@@ -155,18 +156,65 @@ def add_to_cart(request, item_id, *args, **kwargs):
     product = Goods.objects.get(id=item_id)
     user = request.user
     basket = Basket.objects.get(user=user, active=True)
-    print(product)
-    print(basket)
-    basket_item, status = BasketItems.objects.get_or_create(goods=product, basket=basket, quantity=1)
-    print(basket_item)
     basket.items.add(product)
     basket.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 
 def delete_from_cart(request, item_id, *args, **kwargs):
-    product = Goods.objects.filter(id=item_id)
-    basket_item = BasketItems.objects.filter(item=product)
-    if basket_item.exists():
-        basket_item[0].delete()
+    user = request.user
+    basket = Basket.objects.get(user=user, active=True)
+    basket.items.remove(item_id)
+    basket.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+def submit_purchase(request, *args, **kwargs):
+    if request.method == "POST":
+        user = request.user
+        total_price = float(request.POST.get("total_price"))
+        basket = Basket.objects.get(user=user)
+        order = Order.objects.create(basket=basket, total_price=total_price)
+        order.basket_items = basket.items
+        order.save()
+        basket.items.clear()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+
+class FilterPageView(View):
+    def get(self, request, tag, *args, **kwargs):
+        goods = Goods.objects.filter(tags__name=tag)
+        if User.is_authenticated:
+            user = self.request.user
+            if Basket.objects.filter(user=user).count() == 0:
+                basket = Basket(user=user, active=True)
+                basket.save()
+            else:
+                basket = Basket.objects.get(user=user, active=True)
+            return render(request, "realization/filtered_pages.html", context={
+                'goods': goods,
+                'basket': basket,
+                'user': user,
+            })
+        return render(request, "realization/filtered_pages.html", context={
+            'goods': goods,
+        })
+
+
+class SearchView(View):
+
+    def post(self, request, *args, **kwargs):
+        q = request.POST['q']
+        goods = Goods.objects.filter(Q(name__icontains=q))
+        if User.is_authenticated:
+            user = self.request.user
+            if Basket.objects.filter(user=user).count() == 0:
+                basket = Basket(user=user, active=True)
+                basket.save()
+            else:
+                basket = Basket.objects.get(user=user, active=True)
+            return render(request, "realization/searched_page.html", context={
+                'goods': goods,
+                'basket':basket,
+                'user': user,
+            })
+        return render(request, "realization/searched_page.html", { "goods": goods})

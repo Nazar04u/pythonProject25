@@ -25,7 +25,9 @@
                     {% endif %}
                     <p>Amount available: {{ good.amount }}</p>
                     <p>Seller: {{good.seller}}</p>
-                    <p> {{basket}} </p>
+                    {% for tag in good.tags.all %}
+                        <a href="{% url 'filtered_page' tag=tag  %}" class="badge bg-info text-dark">#{{ tag }}</a>
+                    {% endfor %}
                     <a href="{% url 'add_to_cart' item_id=good.id %}" class="btn btn-warning" >Add to cart</a>
                 </div>
             </div>

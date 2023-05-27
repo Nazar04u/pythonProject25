@@ -2,6 +2,7 @@ from django.contrib.auth.models import User, AbstractUser
 from django.db import models
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.utils import timezone
+from taggit.managers import TaggableManager
 
 
 class Goods(models.Model):
@@ -14,7 +15,7 @@ class Goods(models.Model):
     image = models.ImageField(upload_to='static/img')
     date = models.DateTimeField(default=timezone.now)
     seller = models.ForeignKey(User, on_delete=models.CASCADE)
-
+    tags = TaggableManager()
 
 class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -57,3 +58,7 @@ class BasketItems(models.Model):
     basket = models.ForeignKey(Basket, on_delete=models.CASCADE, default=None)
     goods = models.ForeignKey(Goods, on_delete=models.CASCADE, default=None)
     quantity = models.IntegerField(default=0)
+
+class Order(models.Model):
+    basket = models.ForeignKey(Basket, on_delete=models.CASCADE, default=None)
+    total_price = models.IntegerField(default=0)

@@ -9,76 +9,67 @@
 {% block content %}
     <div class="container">
         <h3>Your things:</h3>
-        <p> {{basket_items}} </p>
-        <p> {{basket}} </p>
-        <p> {{basket.id}} </p>
-        <form class="row" action="" method="post">
-            <div class="col-4">
-                <div class="card">
-                    <img src="../img/Watch.svg" class="w-100 border-bottom" alt="Product">
-                    <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <p class="card-text">Here is some example text to make up the card's content. Replace it with your own text anytime.</p>
-                    </div>
-                    <label for="item3Price">Price:</label>
-                    <input type="number" class="form-control price" step="0.01" oninput="calculateTotal()">
-                    <label for="item3Quantity">Quantity:</label>
-                    <input type="number" class="form-control quantity" oninput="calculateTotal()">
-                    <div class="card-body">
-                        <a href="#" class="btn btn-danger btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Delete" ><i class="fa fa-trash"></i></a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-4">
-                <div class="card">
-                    <img src="../img/Watch.svg" class="w-100 border-bottom" alt="Product">
-                    <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <p class="card-text">Here is some example text to make up the card's content. Replace it with your own text anytime.</p>
-                    </div>
-                    <label for="item3Price">Price:</label>
-                    <input type="number" class="form-control price" step="0.01" oninput="calculateTotal()">
-                    <label for="item3Quantity">Quantity:</label>
-                    <input type="number" class="form-control quantity" oninput="calculateTotal()">
-                    <div class="card-body">
-                        <button class="btn btn-danger btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Delete" ><i class="fa fa-trash"></i></button>
+        <form class="row" action="{% url 'submit_purchase' %}" method="post" id="purchaseForm">
+            {% csrf_token %}
+            {% for item in items %}
+                <div class="col-4">
+                    <div class="card">
+                        <img src="../../media/{{ item.image }}" class="w-100 h-50 border-bottom" alt="{{ item.name }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ item.name }}</h5>
+                            <a class="card-text" href="{% url 'detail' pk=basket.pk %}">Details</a>
+                        </div>
+                        <p>Price(грн):</p>
+                        <p class="form-control price">{{ item.price }}</p>
+                        <label for="item3Quantity">Quantity:</label>
+                        <input type="number" class="form-control quantity" value="1" min="1">
+                        <div class="card-body">
+                            <a href="#" class="btn btn-danger btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></a>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-4">
-                <div class="card">
-                    <img src="../img/Watch.svg" class="w-100 border-bottom" alt="Product">
-                    <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <p class="card-text">Here is some example text to make up the card's content. Replace it with your own text anytime.</p>
-                    </div>
-                    <label for="item3Price">Price:</label>
-                    <input type="number" class="form-control price" step="0.01" oninput="calculateTotal()">
-                    <label for="item3Quantity">Quantity:</label>
-                    <input type="number" class="form-control quantity" oninput="calculateTotal()">
-                    <div class="card-body">
-                        <button class="btn btn-danger btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Delete" ><i class="fa fa-trash"></i></button>
-                    </div>
-                </div>
-            </div>
-            <div class="col-4">
-                <div class="card">
-                    <img src="../img/Watch.svg" class="w-100 border-bottom" alt="Product">
-                    <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <p class="card-text">Here is some example text to make up the card's content. Replace it with your own text anytime.</p>
-                    </div>
-                    <label for="item3Price">Price:</label>
-                    <input type="number" class="form-control price" step="0.01" oninput="calculateTotal()">
-                    <label for="item3Quantity">Quantity:</label>
-                    <input type="number" class="form-control quantity" oninput="calculateTotal()">
-                    <div class="card-body">
-                        <button class="btn btn-danger btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Delete" ><i class="fa fa-trash"></i></button>
-                    </div>
-                </div>
-            </div>
+            {% endfor %}
             <p id="totalPrice"></p>
+            <input type="hidden" id="totalPriceInput" name="total_price">
             <button type="submit" class="btn btn-primary">Submit Total Price</button>
         </form>
     </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.quantity').on('input', calculateTotal);
+
+            // Calculate the total price immediately when the document is ready
+            calculateTotal();
+
+            $('#purchaseForm').submit(function (e) {
+                e.preventDefault();  // Prevent the form from submitting normally
+
+                // Show a confirmation dialog
+                var total = $('#totalPriceInput').val();
+                var confirmed = confirm('Are you sure you want to purchase items for a total of ' + total + ' грн?');
+
+                if (confirmed) {
+                    // If confirmed, submit the form
+                    this.submit();
+                }
+            });
+
+            function calculateTotal() {
+                var totalPrice = 0;
+
+                $('.card').each(function () {
+                    var price = parseFloat($(this).find('.price').text());
+                    var quantity = parseInt($(this).find('.quantity').val() || 0);
+                    var itemTotal = price * quantity;
+
+                    totalPrice += itemTotal;
+                });
+
+                $('#totalPrice').text('Total Price: ' + totalPrice.toFixed(2));
+                $('#totalPriceInput').val(totalPrice.toFixed(2));
+            }
+        });
+    </script>
 {% endblock %}

@@ -11,16 +11,16 @@
             <div class="row">
                 <div class="col-1 col-xl-1 col-lg-1 col-md-1 col-sm-4 logo"><i class="fa-brands fa-google"></i></div>
                 <div class="col-7 col-xl-8 col-lg-8 col-md-8 col-sm-0 href">
-                    <p><a href="#" class="Goods">Phones</a></p>
-                    <p><a href="#" class="Goods">Earbuds</a></p>
-                    <p><a href="#" class="Goods">Watches</a></p>
-                    <p><a href="#" class="Goods">Smart House</a></p>
-                    <p><a href="#" class="Goods">Laptops</a></p>
-                    <p><a href="#" class="Goods">Accesoires</a></p>
+                    <p><a href="{% url 'filtered_page'  tag='Phones' %}" class="Goods">Phones</a></p>
+                    <p><a href="{% url 'filtered_page'  tag='Earbuds' %}" class="Goods">Earbuds</a></p>
+                    <p><a href="{% url 'filtered_page'  tag='Watches' %}" class="Goods">Watches</a></p>
+                    <p><a href="{% url 'filtered_page'  tag='Smart House' %}" class="Goods">Smart House</a></p>
+                    <p><a href="{% url 'filtered_page'  tag='Laptops' %}" class="Goods">Laptops</a></p>
+                    <p><a href="{% url 'filtered_page'  tag='Accesoires' %}" class="Goods">Accesoires</a></p>
                 </div>
                 <div class="col-4 col-xl-3 col-lg-3 col-md-3 col-sm-8 icons">
                     <div class="w-50">
-                        <form class="d-flex flex-row" action="" method="post">
+                        <form class="d-flex flex-row" action="{% url 'searched_page' %}" method="post">
                             {% csrf_token %}
                             <input name="q" type="text" class="form-control" placeholder="Пошук" aria-label="Пошук">
                             <button type="submit" class="btn btn-light"><i class="fa-solid fa-magnifying-glass"></i></button>

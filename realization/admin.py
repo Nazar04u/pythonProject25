@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Goods, Comment, Question, Basket, BasketItems
+from .models import Goods, Comment, Question, Basket, BasketItems, Order
 
 class BasketItemsAdmin(admin.ModelAdmin):
     list_display = ('basket', 'goods', 'quantity')
@@ -17,9 +17,13 @@ class CommentAdmin(admin.ModelAdmin):
 class GoodsAdmin(admin.ModelAdmin):
     list_display = ('name', 'price', 'amount')
 
+class OrderAdmin(admin.ModelAdmin):
+    list_display = ('total_price',)
+
 
 admin.site.register(Goods, GoodsAdmin)
 admin.site.register(Comment, CommentAdmin)
 admin.site.register(Question, QuestionAdmin)
 admin.site.register(Basket, BasketAdmin)
 admin.site.register(BasketItems, BasketItemsAdmin)
+admin.site.register(Order, OrderAdmin)
