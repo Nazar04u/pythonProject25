@@ -28,14 +28,13 @@
                     </div>
                     <a href="{% url 'question' %}" class="link-dark text-decoration-none"><i class="fa-solid fa-circle-question"></i></a>
                     {% if user.is_authenticated %}
-                        <p>1</p>
-                        <p>{{ basket_id }}</p>
                         <a href="{% url 'basket' id=basket.id%}" class="link-dark text-decoration-none"><i class="fa-solid fa-cart-shopping"></i></a>
+                        <p> {{ user }} </p>
+                        <a href="{% url 'logout' %}" class="link-dark text-decoration-none"><i class="fa-light fa-arrow-right-from-bracket"></i></a>
                     {% else %}
-                        <p>2</p>
                         <a href="{% url 'signup' %}" class="link-dark text-decoration-none"><i class="fa-solid fa-user"></i></a>
                     {% endif %}
-                    <a href="{% url 'signup' %}" class="link-dark text-decoration-none"><i class="fa-solid fa-user"></i></a>
+
                 </div>
             </div>
         </div>

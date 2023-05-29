@@ -24,7 +24,7 @@
                         <label for="item3Quantity">Quantity:</label>
                         <input type="number" class="form-control quantity" value="1" min="1">
                         <div class="card-body">
-                            <a href="#" class="btn btn-danger btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></a>
+                            <a href="{% url 'delete_from_cart' item_id=item.id %}" class="btn btn-danger btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></a>
                         </div>
                     </div>
                 </div>

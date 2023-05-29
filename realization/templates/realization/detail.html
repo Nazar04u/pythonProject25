@@ -28,7 +28,11 @@
                     {% for tag in good.tags.all %}
                         <a href="{% url 'filtered_page' tag=tag  %}" class="badge bg-info text-dark">#{{ tag }}</a>
                     {% endfor %}
-                    <a href="{% url 'add_to_cart' item_id=good.id %}" class="btn btn-warning" >Add to cart</a>
+                    {% if good not in basket_items %}
+                        <a href="{% url 'add_to_cart' item_id=good.id %}" class="btn btn-warning" >Add to cart</a>
+                    {% else %}
+                        <button disabled class="btn btn-warning">Already in cart</button>
+                    {% endif %}
                 </div>
             </div>
         </div>

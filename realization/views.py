@@ -6,7 +6,7 @@ from django import forms
 from django.utils import timezone
 from django.core.paginator import Paginator
 from .forms import SignUpForm, SignInForm, CommentForm, QuestionForm
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm
 from django.db.models import Q
@@ -20,8 +20,8 @@ class HomeView(View):
 
         page_number = request.GET.get("page")
         page_obj = paginator.get_page(page_number)
-        if User.is_authenticated:
-            user = self.request.user
+        user = self.request.user
+        if user.is_authenticated:
             if Basket.objects.filter(user=user).count() == 0:
                 basket = Basket(user=user, active=True)
                 basket.save()
@@ -79,6 +79,10 @@ class SignInView(View):
         })
 
 
+def logout_view(request):
+    logout(request)
+    return render(request, 'realization/home.html')
+
 class DetailView(View):
     def get(self, request, pk, *args, **kwargs):
         good = Goods.objects.get(pk=pk)
@@ -89,16 +93,19 @@ class DetailView(View):
             if Basket.objects.filter(user=user).count() == 0:
                 basket = Basket(user=user, active=True)
                 basket.save()
+                basket_items = basket.items.all()
             else:
                 basket = Basket.objects.get(user=user, active=True)
+                basket_items = basket.items.all()
             return render(request, "realization/detail.html", context={
                 'good': good,
                 'form': form,
                 'comment': comment,
                 'basket': basket,
+                'basket_items': basket_items,
                 'user': user,
             })
-        return render(request, 'realization/detail.html', context={
+        return render(request, 'realization/home.html', context={
             'good': good,
             'form': form,
             'comment': comment,
@@ -113,7 +120,8 @@ class DetailView(View):
             assess = request.POST['assess']
             comment = Comment.objects.create(user=user, good=good, comment=commentar, assess=assess)
             return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
-        return render(request, 'realization/home.html', context={})
+        form = SignUpForm()
+        return render(request, "realization/signup.html", {"form": form})
 
 
 class QuestionView(View):
@@ -126,15 +134,15 @@ class QuestionView(View):
     def post(self, request, *args, **kwargs):
         form = QuestionForm(request.POST)
         if form.is_valid():
-            if User.is_authenticated:
-                user = self.request.user
+            user = self.request.user
+            if user.is_authenticated:
                 text = request.POST['text']
                 form = Question.objects.create(user=user, text=text)
                 return render(request, 'realization/thanks.html')
-            return render(request, 'realization/signup.html', context={
-                 'title': 'User is not login'
-             })
-        return render(request, 'realization/home.html', context={})
+            form = SignUpForm()
+            return render(request, "realization/signup.html", {"form": form})
+        form = SignUpForm()
+        return render(request, "realization/signup.html", {"form": form})
 
 
 class ThanksView(View):
@@ -153,12 +161,15 @@ class BasketView(View):
 
 
 def add_to_cart(request, item_id, *args, **kwargs):
-    product = Goods.objects.get(id=item_id)
     user = request.user
-    basket = Basket.objects.get(user=user, active=True)
-    basket.items.add(product)
-    basket.save()
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+    if user.is_authenticated:
+        product = Goods.objects.get(id=item_id)
+        basket = Basket.objects.get(user=user, active=True)
+        basket.items.add(product)
+        basket.save()
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+    form = SignUpForm()
+    return render(request, "realization/signup.html", {"form": form})
 
 
 def delete_from_cart(request, item_id, *args, **kwargs):
@@ -195,9 +206,8 @@ class FilterPageView(View):
                 'basket': basket,
                 'user': user,
             })
-        return render(request, "realization/filtered_pages.html", context={
-            'goods': goods,
-        })
+        form = SignUpForm()
+        return render(request, "realization/signup.html", {"form": form})
 
 
 class SearchView(View):
@@ -205,8 +215,8 @@ class SearchView(View):
     def post(self, request, *args, **kwargs):
         q = request.POST['q']
         goods = Goods.objects.filter(Q(name__icontains=q))
-        if User.is_authenticated:
-            user = self.request.user
+        user = self.request.user
+        if user.is_authenticated:
             if Basket.objects.filter(user=user).count() == 0:
                 basket = Basket(user=user, active=True)
                 basket.save()
@@ -217,4 +227,5 @@ class SearchView(View):
                 'basket':basket,
                 'user': user,
             })
-        return render(request, "realization/searched_page.html", { "goods": goods})
+        form = SignUpForm()
+        return render(request, "realization/signup.html", {"form": form})
